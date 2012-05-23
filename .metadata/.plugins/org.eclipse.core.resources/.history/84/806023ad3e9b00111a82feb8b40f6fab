@@ -1,0 +1,27 @@
+import java.awt.Dimension;
+import javax.swing.*;
+
+public class MainWindow {
+	
+	private static JFrame mainwindow;
+	private static final Dimension WINDOW_SIZE = new Dimension(800, 600);
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {	
+		initGUI();
+	}
+	
+    private static void initGUI() {
+    	mainwindow = new JFrame("Data Converter voor Water Apps");
+    	mainwindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+    	mainwindow.setMinimumSize(WINDOW_SIZE);
+    	mainwindow.setMaximumSize(WINDOW_SIZE);
+         
+    	mainwindow.pack();
+    	mainwindow.setVisible(true);
+    }
+
+}

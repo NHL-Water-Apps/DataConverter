@@ -1,0 +1,21 @@
+import javax.swing.JFrame;
+
+/**
+ *	Dit is het ingangs punt van de data convert applicatie.
+ *
+ *	@author Marten Schilstra <martenschilstra@gmail.com>
+ */
+public class Dataconverter {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("FrameDemo");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
+		frame.pack();
+		frame.setVisible(true);
+
+	}
+}

@@ -1,0 +1,19 @@
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+/**
+ *	Dit is het ingangs punt van de data convert applicatie.
+ *
+ *	@author Marten Schilstra <martenschilstra@gmail.com>
+ */
+public class Dataconverter {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		JOptionPane.showMessageDialog(null, "Hello World", JOptionPane.PLAIN_MESSAGE);
+
+	}
+
+}

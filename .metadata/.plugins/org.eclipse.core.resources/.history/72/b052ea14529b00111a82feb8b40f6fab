@@ -1,0 +1,52 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.LayoutManager;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle;
+
+/**
+ * Dit creeert een panel dat waarin je het bron en doelbestand voor de conversie 
+ * kunt selecteren.
+ *  
+ * @author Marten Schilstra <info@martndemus.nl>
+ */
+public class FileLocationPanel extends JPanel {
+	
+	private static final long serialVersionUID = 1L;
+	
+	private JButton locateSourceFileButton;
+	private JButton locateDestFileButton;
+	
+	private JTextField sourceFileLocation;
+	private JTextField destFileLocation;
+
+	public FileLocationPanel() {
+		setBounds(MainWindow.PanelBounds);
+		setLayout(null);
+		
+		JLabel panelHowToLabel = new JLabel("<html>Selecteer eerst het GML bronbestand om waar de data in staat en geef daarna aan waar de<br> geconverteerde data moet worden opgeslagen.");
+		panelHowToLabel.setVerticalTextPosition(0);
+		panelHowToLabel.set
+		panelHowToLabel.setBounds(20, 20, 760, 150);
+		add(panelHowToLabel);
+		
+		locateSourceFileButton = new JButton("Zoek");
+		locateSourceFileButton.setBounds(320, 150, 100, 30);
+		add(locateSourceFileButton);
+		
+		locateDestFileButton = new JButton("Zoek");
+		locateDestFileButton.setBounds(320, 200, 100, 30);
+		add(locateDestFileButton);
+		
+		sourceFileLocation = new JTextField();
+		sourceFileLocation.setBounds(100, 150, 200, 30);
+		sourceFileLocation.setSize(200,30);
+		add(sourceFileLocation);
+		
+		
+	}
+}

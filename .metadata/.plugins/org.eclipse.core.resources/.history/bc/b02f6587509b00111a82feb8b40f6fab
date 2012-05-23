@@ -1,0 +1,45 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.LayoutManager;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle;
+
+/**
+ * Dit creeert een panel dat waarin je het bron en doelbestand voor de conversie 
+ * kunt selecteren.
+ *  
+ * @author Marten Schilstra <info@martndemus.nl>
+ */
+public class FileLocationPanel extends JPanel {
+	
+	private static final long serialVersionUID = 1L;
+	
+	private JButton locateSourceFileButton;
+	private JButton locateDestFileButton;
+	
+	private JTextField sourceFileLocation;
+	private JTextField destFileLocation;
+
+	public FileLocationPanel(LayoutManager layout) {
+		setBounds(MainWindow.PanelBounds);
+		setLayout(layout);
+		
+		locateSourceFileButton = new JButton("Zoek");
+		locateSourceFileButton.setBounds(320, 100, 100, 30);
+		add(locateSourceFileButton);
+		
+		locateDestFileButton = new JButton("Zoek");
+		locateDestFileButton.setBounds(0, 0, 100, 30);
+		add(locateDestFileButton);
+		
+		sourceFileLocation = new JTextField();
+		sourceFileLocation.setBounds(100, 100, 200, 30);
+		sourceFileLocation.setSize(200,30);
+		add(sourceFileLocation);
+		
+		
+	}
+}

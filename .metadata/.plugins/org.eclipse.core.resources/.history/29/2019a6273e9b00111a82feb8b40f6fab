@@ -1,0 +1,31 @@
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import javax.swing.*;
+
+public class MainWindow {
+	
+	private static final Dimension WINDOW_SIZE = new Dimension(800, 600);
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+		initGUI();
+	}
+	
+    private static void initGUI() {
+        JFrame frame = new JFrame("Data Converter voor Water Apps");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        frame.setMinimumSize(WINDOW_SIZE);
+ 
+        JLabel emptyLabel = new JLabel("Test");
+        emptyLabel.setPreferredSize(new Dimension(20, 20));
+        frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
+ 
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+}

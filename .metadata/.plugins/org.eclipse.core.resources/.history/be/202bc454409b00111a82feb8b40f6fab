@@ -1,0 +1,56 @@
+import java.awt.Dimension;
+import javax.swing.*;
+/**
+ * De class die alles omtrent de graphical window regelt en tevens entry point van de applicatie.
+ *  
+ * @author Marten Schilstra <info@martndemus.nl>
+ */
+public class MainWindow {
+	
+	private static JFrame mainwindow;
+	private static String mainWindowTitle = "Data Converter voor Water Apps" ;
+	
+	private static final Dimension WINDOW_SIZE = new Dimension(800, 600);
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {	
+		initMainWindow();
+	}
+	
+	/**
+	 * @return De grootte van de MainWindow als een Dimension object.
+	 */
+	public static Dimension GetWindowSize() {
+		return WINDOW_SIZE;
+	}
+	
+	/**
+	 * @return De titel van de MainWindow.
+	 */
+	public static String GetWindowTitle() {
+		return mainWindowTitle;
+	}
+	
+	/**
+	 * @param title Een string die de titel van de MainWindow moet worden.
+	 */
+	public static void SetWindowTitle(String title) {
+		mainWindowTitle = title;
+	}
+	
+	/**
+	 * Initialiseert de mainwindow.
+	 */
+    private static void initMainWindow() {
+    	mainwindow = new JFrame(mainWindowTitle);
+    	mainwindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+    	mainwindow.setMinimumSize(WINDOW_SIZE);
+    	mainwindow.setResizable(false);
+         
+    	mainwindow.pack();
+    	mainwindow.setVisible(true);
+    }
+}
