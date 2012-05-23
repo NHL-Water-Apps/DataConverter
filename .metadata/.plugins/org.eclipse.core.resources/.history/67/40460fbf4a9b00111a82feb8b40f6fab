@@ -1,8 +1,0 @@
-/**
- * De class die alles omtrent de graphical window regelt en tevens entry point van de applicatie.
- *  
- * @author Marten Schilstra <info@martndemus.nl>
- */
-public class FileLocationPanel {
-
-}

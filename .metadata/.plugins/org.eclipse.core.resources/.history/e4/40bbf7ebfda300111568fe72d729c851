@@ -1,9 +1,0 @@
-public class Coord {
-	public double x;
-	public double y;
-	
-	public Coord(double _x, double _y) {
-		this.x = _x;
-		this.y = _y;
-	}
-}

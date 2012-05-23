@@ -66,7 +66,6 @@ public class VwAppDataConverter {
 					
 					if (i < _DataList.getLength() - 1) {
 						_Out.write(",");
-						
 					}
 				}
 				
