@@ -29,53 +29,85 @@ public class VwAppDataConverter {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		initRenameTable();
-		
-		// Pak de input filename en maak er een .json filename voor de output file.
-		String newFileName = args[0] + ".json";
-		
-		// Initializeer de output stream om naar een file te writen.
-		try {
-			_Out = new FileWriter(new File(newFileName));
-		} catch (IOException e) {
-			e.printStackTrace();
+		// Als het argument voor het input bestand mist...
+		if (args.length == 0) {
+			System.out.println("Je bent vergeten een source bestand op te geven.");
+			System.out.println("\nVoorbeeld:");
+			System.out.println("\t java -jar VwAppDataConverter.jar inputbestandnaam.gml");
 			return;
 		}
-
 		
-		// Open de input file en bouw een XML DOM tree van de data.
-		File GMLFile = new File(args[0]);	
+		// Pak de input filename en maak er een .js filename van, voor de output file.
+		// Haalt de extensie eraf en plakt .js er aan vast.
+		String newFileName = args[0].substring(0, args[0].lastIndexOf(".")) + ".js";
+		
+		initRenameTable();
+		
+		System.out.println("Bezig met omzetten van " + args[0] + " naar " + newFileName);
+				
+		File GMLFile = new File(args[0]);
+		
+		// Check of het bron bestand bestaat
+		if (!GMLFile.exists()) {
+			System.out.println("FOUT: Kon bronbestand " + args[0] + " niet vinden.");
+			return;
+		}
+		
+		// Bouw een XML DOM tree van de data van het bronbestand.
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			_GMLDocument = db.parse(GMLFile);  
 		} catch (Exception e) {
+			System.out.println("FOUT: Er is iets misgegaan met het parsen van " + args[0] + ".");
 			e.printStackTrace();
 			return;
 		}
 		
+		// Initialiseer de output stream om naar een file te writen.
+		try {
+			_Out = new FileWriter(new File(newFileName));
+		} catch (IOException e) {
+			System.out.println("FOUT: Kon het doelbestand niet aanmaken.");
+			e.printStackTrace();
+			return;
+		} 
+		
 		// Als alles hierboven is gelukt, dan gaan we nu converten en schrijven.
 		if (_GMLDocument != null && _Out != null) {
 			try {
-			
+				
+				// Pak alle nodes die interressant zijn. (gml:featureMember)
 				_DataList = _GMLDocument.getElementsByTagName("gml:featureMember");
-				_Out.write("[");
+				
+				// Een stukje aan het begin van de file schrijven.
+				_Out.write("module.exports = [");
+				
+				// Loop door alle items in de file.
 				for (int i = 1; i < _DataList.getLength(); i++) {
 					
+					// Schrijf de data van het item geformatteerd naar het bestand.
 					_Out.write(formatItem(_DataList.item(i).getFirstChild()));
 					
+					// Kommatje toevoegen.
 					if (i < _DataList.getLength() - 1) {
 						_Out.write(",");
 					}
 				}
 				
+				// Array sluiten.
 				_Out.write("]");
+				
+				// Flush zorgt ervoor dat alles in de buffer naar het bestand geschreven wordt.
 				_Out.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
 				return;
 			}
 		}
+		
+		// Alles is gelukt
+		System.out.println("Done!");
 	}
 	
 	/**
@@ -116,11 +148,15 @@ public class VwAppDataConverter {
 		_ColumnRenameTable.put("PGR:SOORT", 	    "TYPE");
 		_ColumnRenameTable.put("PGR:NR", 			"ID");
 		
+		// Renames voor Visstekken.gml
+		//			Oude Naam	-->		Niewe Naam
+		_ColumnRenameTable.put("PGR:WATER", 	    "title"); // verplicht lowercase
 	}
 	
 	/**
 	 * Rekent de vreemde X,Y coordinaat om in een Latitude en Longitude met behulp van een
 	 * berekening.
+	 * @param <Coord>
 	 * 
 	 * @param x
 	 * @param y
@@ -132,6 +168,7 @@ public class VwAppDataConverter {
 		double dx = (x - 155000) / 100000;
 		double dy = (y - 463000) / 100000;
 		
+		// Geen idee hoe deze formule werkt, maar het werkt.
 		double latitude = 52.1551744 + (3235.65389 * dy - 32.58297 * Math.pow(dx, 2) - 0.2475 * Math.pow(dy, 2) - 0.84978 * Math.pow(dx, 2) * dy - 0.0655 * Math.pow(dy, 3) - 0.01709 * Math.pow(dx, 2) * Math.pow(dy, 2) - 0.00738 * dx + 0.0053 * Math.pow(dx, 4) - 0.00039 * Math.pow(dx, 2) * Math.pow(dy, 3) + 0.00033 * Math.pow(dx, 4) * dy - 0.00012 * dx * dy) / 3600; 
 		double longitude = 5.38720621 + (5260.52916 * dx + 105.94684 * dx * dy + 2.45656 * dx * Math.pow(dy, 2) - 0.81885 * Math.pow(dx, 3) + 0.05594 * dx * Math.pow(dy, 3) - 5.559383 * Math.pow(dx, 3) * dy + 0.001199 * dy - 0.00256 * Math.pow(dx, 3) * Math.pow(dy, 2) + 0.00128 * dx * Math.pow(dy, 4) + 0.00022 * Math.pow(dy, 2) - 0.00022 * Math.pow(dx, 2) + 0.00026 * Math.pow(dx, 5)) / 3600;
 		
@@ -174,19 +211,19 @@ public class VwAppDataConverter {
 						colVal = colVal.replace("\"", "\\\"");
 					}
 					
-					// Als het een nummer is, geen quotes gebruiken, anders wel.
+					// Als het een nummer is, geen quotes gebruiken om de waarde, anders wel.
 					if (colVal.matches("(\\d)+(.(\\d)*)?")) {
 						JSONformatted += colVal;
 					} else {
 						JSONformatted += "\"" + colVal + "\"";
 					}			
 					
-					// Tenzij het de laatste is, een komma aan het eind.
-					if (i < properties.getLength() - 1) {
-						JSONformatted += ",";
-					}
 				}
+				
+				// Komma ertussen.
+				JSONformatted += ",";
 			} 
+			
 			
 			// Als het de shape is, pak dan de text ervan en bereken de LAT/LONG coordinaten.
 			if (col.getNodeName() == "PGR:SHAPE") {
@@ -194,6 +231,14 @@ public class VwAppDataConverter {
 				Coord c = convertCoords(Double.parseDouble(rawCoords[0]), Double.parseDouble(rawCoords[1]));
 				
 				JSONformatted += "\"LAT\":" +  c.latitude + ",\"LON\":" + c.longitude;	
+				
+				// Komma ertussen.
+				JSONformatted += ",";
+			} 
+			
+			// Als het de laatste is, haal de laatste komma weg.
+			if (i == properties.getLength() - 1) {
+				JSONformatted = JSONformatted.substring(0, JSONformatted.lastIndexOf(","));
 			}
 		}		
 		
