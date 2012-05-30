@@ -145,7 +145,7 @@ public class VwAppDataConverter {
 		//			Oude Naam	-->		Niewe Naam
 		_ColumnRenameTable.put("PGR:LOCATIE_NL", 	"title");
 		_ColumnRenameTable.put("PGR:CODE",	 		"CODE");
-		_ColumnRenameTable.put("PGR:SOORT", 	    "TYPE");
+		_ColumnRenameTable.put("PGR:SOORT", 	    "MOORAGE");
 		_ColumnRenameTable.put("PGR:NR", 			"ID");
 		
 		// Renames voor Visstekken.gml
@@ -199,7 +199,6 @@ public class VwAppDataConverter {
 				// Slecht geformatte waarden opruimen.
 				if (!(colVal.matches(" ") || colVal.matches("-") || colVal.matches("geen foto beschikbaar"))) {	
 					JSONformatted += "\"" + _ColumnRenameTable.get(col.getNodeName()) + "\":";
-					//JSONformatted += "\"" + col.getNodeName() + "\":";
 					
 					// Kolommen met nummers waar een komma is gebruikt opruimen.
 					if (colVal.matches("(\\d)+,(\\d)+")) {
@@ -218,12 +217,10 @@ public class VwAppDataConverter {
 						JSONformatted += "\"" + colVal + "\"";
 					}			
 					
+					// Komma ertussen.
+					JSONformatted += ",";
 				}
-				
-				// Komma ertussen.
-				JSONformatted += ",";
 			} 
-			
 			
 			// Als het de shape is, pak dan de text ervan en bereken de LAT/LONG coordinaten.
 			if (col.getNodeName() == "PGR:SHAPE") {
