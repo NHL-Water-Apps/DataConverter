@@ -24,6 +24,7 @@ public class VwAppDataConverter {
 	private static NodeList _DataList;
 	private static Hashtable<String, String> _ColumnRenameTable;
 	private static FileWriter  _Out;
+	private static boolean lwd;
 	
 	/**
 	 * @param args
@@ -36,10 +37,22 @@ public class VwAppDataConverter {
 			System.out.println("\t java -jar VwAppDataConverter.jar inputbestandnaam.gml");
 			return;
 		}
+				
+		// Checken of we alleen leeuwarden of heel friesland moeten pakken.
+		if (args.length == 2 && args[1].matches("-l")) {
+			lwd = true;
+		} else {
+			lwd = false;
+		}
 		
 		// Pak de input filename en maak er een .js filename van, voor de output file.
 		// Haalt de extensie eraf en plakt .js er aan vast.
-		String newFileName = args[0].substring(0, args[0].lastIndexOf(".")) + ".js";
+		String newFileName;
+		if (lwd) {
+			newFileName = args[0].substring(0, args[0].lastIndexOf(".")) + ".lwd.js";
+		} else {
+			newFileName = args[0].substring(0, args[0].lastIndexOf(".")) + ".js";
+		}
 		
 		initRenameTable();
 		
@@ -86,13 +99,18 @@ public class VwAppDataConverter {
 				// Loop door alle items in de file.
 				for (int i = 1; i < _DataList.getLength(); i++) {
 					
-					// Schrijf de data van het item geformatteerd naar het bestand.
-					_Out.write(formatItem(_DataList.item(i).getFirstChild()));
+					String s = formatItem(_DataList.item(i).getFirstChild());
 					
-					// Kommatje toevoegen.
-					if (i < _DataList.getLength() - 1) {
-						_Out.write(",");
+					if (s != "") {
+						// Schrijf de data van het item geformatteerd naar het bestand.
+						_Out.write(s);
+						
+						// Kommatje toevoegen.
+						if (i < _DataList.getLength() - 1) {
+							_Out.write(",\n");
+						}
 					}
+					
 				}
 				
 				// Array sluiten.
@@ -226,6 +244,11 @@ public class VwAppDataConverter {
 			if (col.getNodeName() == "PGR:SHAPE") {
 				String rawCoords[] = col.getTextContent().split(",");
 				Coord c = convertCoords(Double.parseDouble(rawCoords[0]), Double.parseDouble(rawCoords[1]));
+				
+				// Als only leeuwarden aan is, dan alleen dingen met coordinaten binnen leeuwarden pakken.
+				if (lwd && (c.latitude > 53.20239 || c.latitude < 53.116034) || (c.longitude < 5.814075 || c.longitude > 6.072425)) {
+					return "";
+				}
 				
 				JSONformatted += "\"LAT\":" +  c.latitude + ",\"LON\":" + c.longitude;	
 				

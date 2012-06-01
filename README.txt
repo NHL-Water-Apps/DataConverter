@@ -6,3 +6,8 @@ Instructies:
 
     Voorbeeld:
       java -jar VwAppDataConverter.jar inputbestandnaam.gml
+
+  - Voeg de switch '-l' toe om alleen punten in de Leeuwarden regio te pakken
+
+    Voorbeeld:
+      java -jar VwAppDataConverter.jar inputbestandnaam.gml -l
