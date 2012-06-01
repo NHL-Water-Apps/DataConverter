@@ -246,7 +246,7 @@ public class VwAppDataConverter {
 				Coord c = convertCoords(Double.parseDouble(rawCoords[0]), Double.parseDouble(rawCoords[1]));
 				
 				// Als only leeuwarden aan is, dan alleen dingen met coordinaten binnen leeuwarden pakken.
-				if (lwd && (c.latitude > 53.20239 || c.latitude < 53.116034) || (c.longitude < 5.814075 || c.longitude > 6.072425)) {
+				if (lwd && (c.latitude > 53.235105 || c.latitude < 53.185501) || (c.longitude < 5.707627 || c.longitude > 5.937739)) {
 					return "";
 				}
 				
